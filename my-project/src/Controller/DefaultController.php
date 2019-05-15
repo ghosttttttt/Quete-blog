@@ -6,16 +6,14 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
-class BlogController extends AbstractController
+class DefaultController extends AbstractController
 {
     /**
      * @Route("/blog", name="blog_index")
      */
     public function index()
     {
-        return $this->render('blog/index.html.twig', [
+        return $this->render('index.html.twig', [
             'owner' => 'Thomas',
         ]);
     }
