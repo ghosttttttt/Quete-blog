@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use http\Env\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,13 +19,7 @@ class BlogController extends AbstractController
             'owner' => 'Thomas',
         ]);
     }
-    /**
-     * @Route("/blog/list/{page}", requirements={"page"="\d+"}, name="blog_list")
-     */
-    public function list($page = 1)
-    {
-        return $this->render('blog/list.html.twig', ['page' => $page]);
-    }
+
     public function new()
     {
         // traitement d'un formulaire par exemple
@@ -32,4 +27,17 @@ class BlogController extends AbstractController
         // redirection vers la page 'blog_list', correspondant à l'url /blog/list/5
         return $this->redirectToRoute('blog_list', ['page' => 5]);
     }
+
+    /**
+     * @Route("/blog/show/{slug}", requirements={"slug"="[a-z0-9-\.:\/\/=&]+"},
+     *     name="blog_show")
+     */
+    public function show(string $slug='Mon premier slug')
+    {
+        $title = ucwords(str_replace('-', ' ', $slug));
+        return $this->render('blog/show.html.twig', [
+            'slug' => $title,
+        ]);
+    }
 }
+
