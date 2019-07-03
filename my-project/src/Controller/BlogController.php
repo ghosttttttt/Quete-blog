@@ -96,7 +96,7 @@ class BlogController extends AbstractController
 
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findBy(["Category" => ($category)], ['id' =>'DESC'], 3);
+            ->findBy(["Category" => ($category)], ['id' => 'DESC'], 3);
         return $this->render(
             'blog/category.html.twig',
             [
@@ -106,5 +106,20 @@ class BlogController extends AbstractController
             ]
         );
 
+    }
+    /**
+     * @Route ("blog/tag/{name}",
+     *     name="tag_show")
+     * defaults={"tag" = null},
+     * @return Response A response instance
+     */
+    public function showTag (Tag $tag) : Response
+    {
+        return $this->render(
+            'blog/tag.html.twig',
+            [
+                'tag' => $tag,
+            ]
+        );
     }
 }
