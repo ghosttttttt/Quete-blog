@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/blog", name="blog_")
@@ -85,14 +86,19 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/category/{categoryName}", name="show_category")
+     * @Route ("/blog/category/{name}",
+     *     name="category_show")
+     * defaults={"category" = null},
      * @return Response A response instance
      */
-    public function showByCategory(string $categoryName): Response
-    {
+    public function showByCategory(Category $category): Response
+    {    if (!$category) {
+        throw $this
+            ->createNotFoundException('No category has been found');
+    }
         $category = $this->getDoctrine()
             ->getRepository(category::class)
-            ->findOneBy(['name' => mb_strtolower($categoryName)]);
+            ->findOneBy(['name' => mb_strtolower($category)]);
 
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
@@ -105,15 +111,15 @@ class BlogController extends AbstractController
 
             ]
         );
-
     }
+
     /**
      * @Route ("blog/tag/{name}",
      *     name="tag_show")
      * defaults={"tag" = null},
      * @return Response A response instance
      */
-    public function showTag (Tag $tag) : Response
+    public function showTag(Tag $tag): Response
     {
         return $this->render(
             'blog/tag.html.twig',
